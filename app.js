@@ -9,6 +9,7 @@ const ejsmate = require("ejs-mate");              // Template engine for layouts
 const wrapAsync=require("./util/wrapAsync.js");
 const ExpressError=require("./util/expressError.js");
 const {listingSchema} = require("./schema.js");
+const Review = require("./models/review.js"); 
 
 // ================= MongoDB Connection ================= //
 main()
@@ -99,6 +100,24 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
   console.log(deletedListing);                                   // Log deleted document
   res.redirect("/listings");                                     // Redirect to all listings
 }));
+
+//review 
+app.post("/listings/:id/reviews", async (req, res) => {
+  const listing = await Listing.findById(req.params.id);
+
+  const newReview = new Review({
+    rating: Number(req.body.review.rating),
+    comment: req.body.review.comment,
+  });
+
+  await newReview.save();
+  listing.reviews.push(newReview._id);
+  await listing.save();
+
+  res.redirect(`/listings/${listing._id}`);
+});
+
+
 
 // Root route (home page)
 app.get("/", (req, res) => {
