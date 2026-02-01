@@ -8,7 +8,7 @@ const methodOverride = require("method-override");// For supporting PUT & DELETE
 const ejsmate = require("ejs-mate");              // Template engine for layouts & partials
 const wrapAsync=require("./util/wrapAsync.js");
 const ExpressError=require("./util/expressError.js");
-const {listingSchema} = require("./schema.js");
+const {listingSchema ,reviewJoiSchema} = require("./schema.js");
 const Review = require("./models/review.js"); 
 
 // ================= MongoDB Connection ================= //
@@ -49,6 +49,19 @@ const validateListing = (req,res,next)=>{ //validate middelware
   }
 }
 
+
+const validateReview = (req,res,next)=>{
+  let {error} = reviewJoiSchema.validate(req.body);
+  console.log(error);
+
+  if(error){
+    let errMsg = error.details.map((el)=>el.message).join(",");
+    throw new ExpressError(400,errMsg);
+  }
+  else{
+    next();
+  }
+}
 // Show all listings
 app.get("/listings", wrapAsync(async (req, res) => {
   const allListings = await Listing.find({});           // Fetch all listings from DB
@@ -63,8 +76,12 @@ app.get("/listings/new", (req, res) => {
 // Show a single listing by ID
 app.get("/listings/:id", wrapAsync(async (req, res) => {
   let { id } = req.params;
-  const listing = await Listing.findById(id);           // Find listing by ID
+  const listing = await Listing.findById(id).populate('reviews');           // Find listing by ID
   res.render("listings/show.ejs", { listing });         // Render show page
+}));
+
+app.get("/review/:id", wrapAsync(async (req, res) => {
+
 }));
 
 // Create a new listing (POST request)
@@ -102,7 +119,8 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
 }));
 
 //review 
-app.post("/listings/:id/reviews", async (req, res) => {
+app.post("/listings/:id/reviews",validateReview, 
+  wrapAsync(async (req, res) => {
   const listing = await Listing.findById(req.params.id);
 
   const newReview = new Review({
@@ -115,7 +133,7 @@ app.post("/listings/:id/reviews", async (req, res) => {
   await listing.save();
 
   res.redirect(`/listings/${listing._id}`);
-});
+}));
 
 
 
