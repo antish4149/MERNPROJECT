@@ -17,6 +17,7 @@ const User = require("./models/user.js");
 
 
 
+
 main()
   .then(() => {
     console.log("Successfully connected to DB");
@@ -62,6 +63,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.currUser = req.user;
   next();
 })
 
