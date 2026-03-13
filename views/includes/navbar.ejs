@@ -16,12 +16,12 @@
 
       <div class="navbar-nav ms-auto">
         <% if(!currUser){%>
-          <a class="nav-link "  href="/signup">Signup</a>
-         <a class="nav-link" href="/login">Login</a>
+          <button type="button" class="btn btn-outline-info btn-sm me-2"><a class="nav-link "  href="/signup">Signup</a></button>
+          <button type="button" class="btn btn-outline-info btn-sm me-2"><a class="nav-link" href="/login">Login</a></button> 
         <%} %>
 
         <% if(currUser){%>
-        <a class="nav-link" href="/logout">Log out</a>
+          <button><a class="nav-link" href="/logout">Log out</a></button>    
         <%} %>
       </div>
     </div>

@@ -1,36 +1,35 @@
 const mongoose = require("mongoose");
 const review = require("./review");
-const user=require('./user');
-const Schema=mongoose.Schema;
+const user = require("./user");
+const Schema = mongoose.Schema;
 
 const listingSchema = new Schema({
-    title: {
-        type: String,
-        required: true,
+  title: {
+    type: String,
+    required: true,
+  },
+  description: String,
+  image: {
+  type: String,
+  default: "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+  set: (v) => v?.trim() === "" ? "https://images.unsplash.com/photo-1501785888041-af3ef285b470" : v
+},
+  price: Number,
+  location: String,
+  country: String,
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
     },
-    description: String,
-    image: {
-        type:String,
-        default:"https://unsplash.com/photos/golden-mountain-peaks-at-sunset-with-dramatic-clouds-IyhdFcaRYqE",
-        set:(v)=>
-            v===" "?"https://unsplash.com/photos/golden-mountain-peaks-at-sunset-with-dramatic-clouds-IyhdFcaRYqE":v,
-    },
-    price: Number,
-    location: String,
-    country: String,
-    reviews:[
-        {
-            type:Schema.Types.ObjectId,
-            ref:'Review',
-        }
-    ],
+  ],
 
-    owner: {
-        type:Schema.Types.ObjectId,
-        ref:"User"
-    }
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
-const Listing = mongoose.model("Listing",listingSchema);
+const Listing = mongoose.model("Listing", listingSchema);
 
 module.exports = Listing;
