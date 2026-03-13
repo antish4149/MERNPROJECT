@@ -13,6 +13,7 @@
       <div class="card-body">
         <p class="card-text">
           <b><%=listing.title%></b><br />
+          <b><%=listing.owner.username%></b> <br/>
           <%=listing.description%><br />
           &#8377;<%=listing.price.toLocaleString("en-IN")%><br />
           <%=listing.location%><br />
@@ -24,7 +25,7 @@
 
   <div class="btns">
     <a
-      href="/listing/<%=listing.id %>/edit"
+      href="/listings/<%=listing.id %>/edit"
       class="btn btn-dark col-1 offset-3 edit-btn"
       >Edit</a
     >
