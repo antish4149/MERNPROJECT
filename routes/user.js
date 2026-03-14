@@ -28,8 +28,8 @@ router.post(
         req.flash("success", "user registered");
         res.redirect("/listings");
       });
-    } catch (err) {
-      req.flash("error", err.message);
+    } catch (error) {
+      req.flash("error", error.message);
       res.redirect("/signup");
     }
   }),
@@ -50,8 +50,8 @@ router.post(
       let redirectUrl = res.locals.redirectUrl || '/listings' 
       req.flash("success", "Welcome back");
       res.redirect(redirectUrl);
-    } catch (err) {
-      req.flash("error", err.message);
+    } catch (error) {
+      req.flash("error", error.message);
       res.redirect("/login");
     }
   }),

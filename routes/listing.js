@@ -2,16 +2,12 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../util/wrapAsync.js");
 const Listing = require("../models/listing.js"); // Import Listing model
-const { isLoggedIn,isOwner,validateListing } = require("../middleware.js");
-
+const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 
 // Show all listings
 router.get(
   "/",
-  wrapAsync(async (req, res) => {
-    const allListings = await Listing.find({}); // Fetch all listings from DB
-    res.render("listings/index.ejs", { allListings }); // Render listings/index.ejs
-  }),
+  wrapAsync(),
 );
 
 // Form to create a new listing
@@ -25,8 +21,14 @@ router.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id)
-      .populate("reviews")
-      .populate("owner"); // Find listing by ID
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "author",
+        },
+      })
+      .populate({ path: "owner" });
+    // Find listing by ID
     if (!listing) {
       req.flash("error", "Listing not found");
       res.redirect("/listings");
@@ -53,7 +55,8 @@ router.post(
 // Form to edit an existing listing
 router.get(
   "/:id/edit",
-  isLoggedIn,isOwner,
+  isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id); // Find listing to edit
@@ -65,7 +68,8 @@ router.get(
 // Update an existing listing (PUT request)
 router.put(
   "/:id",
-  isLoggedIn,isOwner,
+  isLoggedIn,
+  isOwner,
   validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -78,7 +82,8 @@ router.put(
 // Delete a listing
 router.delete(
   "/:id",
-  isLoggedIn,isOwner,
+  isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id); // Delete by ID
