@@ -1,26 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../util/wrapAsync.js");
-const Listing = require("../models/listing.js"); // Import Listing model
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const listingController = require("../controllers/listings.js");
+const multer = require('multer')
+const {storage}=require('../cloudConfig.js');
+const upload = multer({storage});
 
-// Show all listings
-router.get("/", wrapAsync(listingController.index));
+
+
+
+
+router
+.route('/')
+.get(wrapAsync(listingController.index))// Show all listings
+.post(isLoggedIn, // Create a new listing (POST request)
+  upload.single('listing[image]'),
+  validateListing,
+  wrapAsync(listingController.createNewListing))
 
 // Form to create a new listing
 router.get("/new", isLoggedIn, listingController.renderForm);
 
-// Show a single listing by ID
-router.get("/:id", wrapAsync(listingController.showListingsById));
-
-// Create a new listing (POST request)
-router.post(
-  "/",
+router
+.route("/:id")
+.get(wrapAsync(listingController.showListingsById)) // Show a single listing by ID
+.put( // Update an existing listing (PUT request)
   isLoggedIn,
+  isOwner,
+  upload.single('listing[image]'),
   validateListing,
-  wrapAsync(listingController.createNewListing),
-);
+  wrapAsync(listingController.updateListing))
+.delete( // Delete a listing
+  isLoggedIn,
+  isOwner,
+  wrapAsync(listingController.deleteListing));
 
 // Form to edit an existing listing
 router.get(
@@ -28,21 +42,5 @@ router.get(
   isLoggedIn,
   isOwner,
   wrapAsync(listingController.editListing));
-
-// Update an existing listing (PUT request)
-router.put(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  validateListing,
-  wrapAsync(listingController.updateListing),
-);
-
-// Delete a listing
-router.delete(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  wrapAsync(listingController.deleteListing));
 
 module.exports = router;

@@ -1,50 +1,88 @@
 <% layout("/layout/boilerplate")%>
 <body>
-    <div class="row">
-        <div class="col-8 offset-2" >
-            <br/><br/>
-            <h3 style="text-align: center;">Create a New Listing</h3>
-    <form method="POST" action="/listings"  class="needs-validation" novalidate>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <br /><br />
+      <h3 style="text-align: center">Create a New Listing</h3>
+      <form
+        method="POST"
+        action="/listings"
+        class="needs-validation"
+        novalidate
+        enctype="multipart/form-data"
+      >
         <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" name="listing[title]" placeholder="enter-title" class="form-control" required/>
-            <div class="valid-feedback">Title looks good!</div>
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            name="listing[title]"
+            placeholder="enter-title"
+            class="form-control"
+            required
+          />
+          <div class="valid-feedback">Title looks good!</div>
         </div>
 
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea type="text" name="listing[description]" class="form-control"  required></textarea>
-            <div class="invalid-feedback">Enter description!</div>
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            type="text"
+            name="listing[description]"
+            class="form-control"
+            required
+          ></textarea>
+          <div class="invalid-feedback">Enter description!</div>
         </div>
 
         <div class="mb-3">
-            <label for="image-link" class="form-label">Image-link</label>
-            <input type="text" name="listing[image]", placeholder="enter image URL/Link" class="form-control"/>
+          <label for="image-link" class="form-label">Upload file</label>
+          <input
+            type="file"
+            name="listing[image]"
+            class="form-control" required
+          />
         </div>
-        
-        <div class="row ">
-            <div class="mb-3 col-md-4">
+
+        <div class="row">
+          <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price</label>
-            <input  name="listing[price]" placeholder="enter price" class="form-control"  required/>
+            <input
+              name="listing[price]"
+              placeholder="enter price"
+              class="form-control"
+              required
+            />
             <div class="invalid-feedback">Enter valid price</div>
-            </div>
-        
-        <div class="mb-3 col-md-8">
+          </div>
+
+          <div class="mb-3 col-md-8">
             <label for="country" class="form-label">Country</label>
-            <input type="text" name="listing[country]" placeholder="India" class="form-control"  required/>
+            <input
+              type="text"
+              name="listing[country]"
+              placeholder="India"
+              class="form-control"
+              required
+            />
             <div class="invalid-feedback">Enter country name</div>
+          </div>
         </div>
-        </div>
-        
+
         <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input type="text" name="listing[location]" placeholder="Hyderabad" class="form-control"  required/>
-            <div class="invalid-feedback">Enter location</div>
+          <label for="location" class="form-label">Location</label>
+          <input
+            type="text"
+            name="listing[location]"
+            placeholder="Hyderabad"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">Enter location</div>
         </div>
-        <br/><br/>
-            <button class="btn btn-dark add-btn">Add</button>
-            <br/><br/>
-    </form>
+        <br /><br />
+        <button class="btn btn-dark add-btn">Add</button>
+        <br /><br />
+      </form>
     </div>
-    </div>
+  </div>
 </body>

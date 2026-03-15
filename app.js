@@ -1,4 +1,7 @@
 
+if(process.env.NODE_ENV!="production"){
+  require('dotenv').config();
+}
 const express = require("express"); // Express framework for server & routing
 const { default: mongoose } = require("mongoose"); // Mongoose for MongoDB connection & models
 const app = express(); // Initialize Express app
