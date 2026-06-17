@@ -85,10 +85,6 @@ app.use('/listings', listingsRouter);
 app.use('/listings/:id/reviews', reviewsRouter)
 app.use('/',userRouter);
 
-// Root route (home page)
-app.get("/", (req, res) => {
-  res.send("Hi, You connected"); // Basic test route
-});
 
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page not found"));
